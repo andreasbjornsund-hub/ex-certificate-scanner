@@ -260,7 +260,7 @@ const ExParser = (() => {
             const m = t.match(pat);
             if (m) {
                 let val = m[1].trim().replace(/[,\s]+$/, '');
-                if (/^(or\s+Protective|Intended\s+for|listed\s+in)/i.test(val)) continue;
+                if (/^(or\s+Protective|Intended\s+for|intended\s+for|listed\s+in|and\s+any|has\s+been|is\s+subject|shall\s+include|in$)/i.test(val)) continue;
                 if (val.length < 3) continue;
                 result.equipment = val;
                 break;
