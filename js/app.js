@@ -173,6 +173,7 @@
             </div>
             <div class="cert-grid">
                 ${field('Ex Marking', data.marking, true)}
+                ${data.markings && data.markings.length > 1 ? fieldFull('Additional Markings', data.markings.slice(1).join('\n')) : ''}
                 ${field('Gas Group', data.gasGroup ? `${data.gasGroup}${data.gasGroupInfo ? ' — ' + data.gasGroupInfo : ''}` : null)}
                 ${field('Temperature Class', data.tempClass ? `${data.tempClass} (max ${data.tempClassMax})` : null)}
                 ${field('Equipment Protection Level', data.epl)}
