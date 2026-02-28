@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ex Certificate Scanner — Extract ATEX & IECEx Certificate Data</title>
+    <meta name="description" content="Upload your ATEX or IECEx certificates and instantly extract equipment marking, gas group, temperature class, protection type, and more. 100% client-side — your data never leaves your browser.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+    <!-- Google Tag Manager placeholder -->
+    <!-- <script>(function(w,d,s,l,i){...})(window,document,'script','dataLayer','GTM-XXXXXXX');</script> -->
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <svg class="ex-hex" viewBox="0 0 60 52" width="28" height="24">
+                    <polygon points="30,1 58,14 58,38 30,51 2,38 2,14" fill="none" stroke="#4df4a4" stroke-width="3"/>
+                    <text x="30" y="36" text-anchor="middle" fill="#4df4a4" font-size="22" font-weight="700" font-family="KHTeka,sans-serif">Ex</text>
+                </svg>
+                <span>Certificate Scanner</span>
+            </a>
+            <div class="nav-links">
+                <a href="#scanner" class="active">Scanner</a>
+                <a href="#history">History</a>
+                <a href="#about">About</a>
+                
+            </div>
+            <button class="hamburger" aria-label="Menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Scan Ex Certificates Instantly</h1>
+            <p class="hero-sub">Upload an ATEX or IECEx certificate PDF. The parser extracts equipment marking, gas group, temperature class, protection type, and more — all in your browser.</p>
+            <div class="trust-badges">
+                <span class="badge">🔒 100% Client-Side</span>
+                <span class="badge">📄 No Upload to Server</span>
+                <span class="badge">⚡ Instant Results</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Scanner Section -->
+    <main id="scanner">
+        <section class="scanner-section">
+            <div class="upload-zone" id="dropZone">
+                <div class="upload-icon">📄</div>
+                <p class="upload-text">Drag & drop a certificate PDF here</p>
+                <p class="upload-sub">or click to browse files</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <div class="upload-formats">Supports IECEx, ATEX (EU), and UKCA certificates</div>
+            </div>
+
+            <!-- Processing indicator -->
+            <div class="processing" id="processing" style="display:none">
+                <div class="spinner"></div>
+                <p>Extracting certificate data...</p>
+            </div>
+
+            <!-- Results -->
+            <div class="results" id="results" style="display:none">
+                <div class="results-header">
+                    <h2>Certificate Data</h2>
+                    <div class="results-actions">
+                        <button class="btn btn-sm" id="copyJson">📋 Copy JSON</button>
+                        <button class="btn btn-sm" id="exportCsv">📊 Export CSV</button>
+                        <button class="btn btn-sm btn-secondary" id="scanAnother">🔄 Scan Another</button>
+                    </div>
+                </div>
+
+                <!-- Confidence banner -->
+                <div class="confidence-bar" id="confidenceBar">
+                    <span class="confidence-label">Extraction confidence:</span>
+                    <div class="confidence-meter"><div class="confidence-fill" id="confidenceFill"></div></div>
+                    <span class="confidence-pct" id="confidencePct">0%</span>
+                </div>
+
+                <!-- Certificate card -->
+                <div class="cert-card" id="certCard">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Raw text toggle -->
+                <details class="raw-text-section">
+                    <summary>View raw extracted text</summary>
+                    <pre class="raw-text" id="rawText"></pre>
+                </details>
+            </div>
+        </section>
+    </main>
+
+    <!-- History Section -->
+    <section id="history" class="history-section" style="display:none">
+        <h2>Scan History</h2>
+        <p class="history-info">Stored locally in your browser. Nothing is sent to any server.</p>
+        <div class="history-actions">
+            <button class="btn btn-sm" id="exportAllCsv">📊 Export All (CSV)</button>
+            <button class="btn btn-sm btn-danger" id="clearHistory">🗑 Clear History</button>
+        </div>
+        <div class="history-list" id="historyList">
+            <p class="empty-state">No certificates scanned yet.</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section" style="display:none">
+        <h2>About This Tool</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3>🔒 Privacy First</h3>
+                <p>Your certificate PDFs are processed entirely in your browser using JavaScript. No file is uploaded to any server. No data is collected, tracked, or stored externally.</p>
+            </div>
+            <div class="about-card">
+                <h3>📋 What It Extracts</h3>
+                <ul>
+                    <li>Certificate number (IECEx / ATEX / UKCA)</li>
+                    <li>Equipment marking (Ex db IIC T4 Gb etc.)</li>
+                    <li>Gas group and temperature class</li>
+                    <li>Protection type(s) and EPL</li>
+                    <li>IP rating and ambient temperature range</li>
+                    <li>Notified body and validity dates</li>
+                    <li>Manufacturer and equipment model</li>
+                    <li>Special conditions (X suffix)</li>
+                    <li>Zone classification</li>
+                </ul>
+            </div>
+            <div class="about-card">
+                <h3>📄 Supported Certificates</h3>
+                <ul>
+                    <li><strong>IECEx</strong> — International Electrotechnical Commission</li>
+                    <li><strong>ATEX</strong> — EU Directive 2014/34/EU</li>
+                    <li><strong>UKCA</strong> — UK Conformity Assessment</li>
+                </ul>
+                <p>Best results with text-based PDFs. Scanned/image PDFs may have reduced accuracy.</p>
+            </div>
+            <div class="about-card">
+                <h3>🔗 Related</h3>
+                <p>Learn about explosion protection fundamentals, zone classification, and equipment marking standards.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Ex Certificate Scanner — Open source, privacy-first certificate parsing.</p>
+        <p>Built for the explosion protection industry. Not a substitute for professional certification review.</p>
+    </footer>
+
+    <!-- PDF.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <!-- Tesseract.js for OCR on scanned/image PDFs -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
