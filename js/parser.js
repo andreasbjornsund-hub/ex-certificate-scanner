@@ -227,13 +227,13 @@ const ExParser = (() => {
 
         // --- Manufacturer ---
         const mfrPatterns = [
+            /Manufacturer[:\s]+([^\n]{3,80})/i,
+            /Applicant[:\s]+([^\n]{3,80})/i,
+            /Issued\s+to[:\s]+([^\n]{3,80})/i,
             /Manufacturer[:\s]*\n\s*Address[:\s]*\n\s*([^\n]{3,80})/i,
             /Manufacturer[:\s]*\n\s*([^\n]{3,80})/i,
-            /Manufacturer[:\s]+([^\n]{3,80})/i,
             /Applicant[:\s]*\n\s*([^\n]{3,80})/i,
-            /Applicant[:\s]+([^\n]{3,80})/i,
             /Issued\s+to[:\s]*\n\s*([^\n]{3,80})/i,
-            /Issued\s+to[:\s]+([^\n]{3,80})/i,
         ];
         for (const pat of mfrPatterns) {
             const m = t.match(pat);
@@ -248,12 +248,13 @@ const ExParser = (() => {
 
         // --- Equipment / Product Name ---
         const eqPatterns = [
-            /Equipment[:\s]*\n\s*(?!Group)([^\n]{3,120})/i,
-            /Equipment[:\s]+(?!Group)([^\n]{3,120})/i,
+            /Product[:\s]+([^\n]{3,120})/i,
+            /Product[:\s]*\n\s*([^\n]{3,120})/i,
+            /(?:Equipment|Apparatus)\s+or\s+Protective\s+System[:\s]+([^\n]{3,120})/i,
+            /Equipment[:\s]+(?!Group|or\s)([^\n]{3,120})/i,
             /Apparatus[:\s]+([^\n]{3,120})/i,
             /Type\s+of\s+Equipment[:\s]+([^\n]{3,120})/i,
-            /Product[:\s]*\n\s*([^\n]{3,120})/i,
-            /Product[:\s]+([^\n]{3,120})/i,
+            /Equipment[:\s]*\n\s*(?!Group)([^\n]{3,120})/i,
         ];
         for (const pat of eqPatterns) {
             const m = t.match(pat);
